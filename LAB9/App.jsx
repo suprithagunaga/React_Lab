@@ -9,9 +9,7 @@ function App(){
   });
   return(
     <div>
-      <nav style={{
-        display:'flex',justifyContent:'center',gap:'20px'
-      }}>
+      <nav style={{display:'flex',justifyContent:'center',gap:'20px'}}>
         <NavLink to="/" style={LinkStyle} end>Home</NavLink>
         <NavLink to="/about" style={LinkStyle}>About</NavLink>
         <NavLink to="/contact" style={LinkStyle}>Contact</NavLink>
