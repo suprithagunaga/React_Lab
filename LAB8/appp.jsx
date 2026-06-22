@@ -55,7 +55,6 @@ export default function App() {
           <h4>{t.name}</h4>
           <p>Due Date: {t.date}</p>
           {t.desc && <p>Description: {t.desc}</p>}
-          <p>Status: {t.done ? "Done" : "Not Done"}</p>
         </div>
       ))}
     </div>
