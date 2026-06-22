@@ -19,7 +19,6 @@ export default function App() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setData({...data,[name]: DOMPurify.sanitize(value.trim())
     });
   };
@@ -41,8 +40,7 @@ export default function App() {
           placeholder="Enter name"
           value={data.name}
           onChange={handleChange}
-          className={errors.name ? "error" : ""}
-        />
+          className={errors.name ? "error" : ""}/>
         {errors.name && <small>{errors.name}</small>}
 
         <input
@@ -51,8 +49,7 @@ export default function App() {
           placeholder="Enter email"
           value={data.email}
           onChange={handleChange}
-          className={errors.email ? "error" : ""}
-        />
+          className={errors.email ? "error" : ""}/>
         {errors.email && <small>{errors.email}</small>}
 
         <input
@@ -61,8 +58,7 @@ export default function App() {
           placeholder="Enter password"
           value={data.password}
           onChange={handleChange}
-          className={errors.password ? "error" : ""}
-        />
+          className={errors.password ? "error" : ""}/>
         {errors.password && <small>{errors.password}</small>}
 
         <label className="checkbox">
