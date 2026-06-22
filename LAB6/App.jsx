@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import DOMPurify from "dompurify";
 import "./App.css";
 export default function App() {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: ""
-  });
+  const [data, setData] = useState({name: "",email: "",password: ""});
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(null);
