@@ -24,20 +24,14 @@ export default function App() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setData({
-      ...data,
-      [name]: DOMPurify.sanitize(value.trim())
+    setData({...data,[name]: DOMPurify.sanitize(value.trim())
     });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.keys(errors).length === 0) {
       setSubmitted(data);
-      setData({
-        name: "",
-        email: "",
-        password: ""
-      });
+      setData({name: "",email: "",password: ""});
     }
   };
   return (
