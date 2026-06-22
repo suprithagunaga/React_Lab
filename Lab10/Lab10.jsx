@@ -1,39 +1,37 @@
-App.jsx
-import React, { useState, useEffect } from 'react';
-const DataFetcher = () => {
-const [data, setData] = useState([]), [q, setQ] = useState(''), [err, setErr] = useState(null), [load, 
-setLoad] = useState(false);
-const fetchData = async () => {
-setLoad(true);
-try {
-const res = await fetch('https://jsonplaceholder.typicode.com/users');
-if (!res.ok) throw new Error('Fetch failed');
-setData(await res.json());
-setErr(null);
-} catch (e) {
-setErr(e.message);
+import React, { useEffect, useState } from "react";
+function DataFetcher() {
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(data => setUsers(data));
+  }, []);
+
+  return (
+    <div>
+      <h1>User Data</h1>
+      <input
+        type="text"
+        placeholder="Search..."
+        onChange={(e) => setSearch(e.target.value)}/>
+        
+      <table border="1" cellPadding="10">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>City</th></tr>
+        </thead>
+
+        <tbody>
+          {users.filter(user =>user.name.toLowerCase().includes(search.toLowerCase()))
+            .map(user => (
+              <tr key={user.id}>
+                <td>{user.name}</td><td>{user.email}</td><td>{user.address.city}</td></tr>
+            ))}
+        </tbody>
+      </table>
+      <button>Refresh</button>
+    </div>
+  );
 }
-setLoad(false);
-};
-useEffect(() => { fetchData(); }, []);
-const filtered = q ? data.filter(d => d.name.toLowerCase().includes(q.toLowerCase())) : data;
-return (
-<div>
-<h1>User Data</h1>
-  {err && <div>Error: {err}</div>}
-<input value={q} onChange={e => setQ(e.target.value)} placeholder="Search..." />
-{load ? <div>Loading...</div> : (
-<table>
-<thead><tr><th>Name</th><th>Email</th><th>City</th></tr></thead>
-<tbody>
-{filtered.length ? filtered.map(({ id, name, email, address }) => (
-<tr key={id}><td>{name}</td><td>{email}</td><td>{address.city}</td></tr>
-)) : <tr><td colSpan="3">No results</td></tr>}
-</tbody>
-</table>
-)}
-<button onClick={fetchData}>Refresh</button>
-</div>
-);
-};
 export default DataFetcher;
