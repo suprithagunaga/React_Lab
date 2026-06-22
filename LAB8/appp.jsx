@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import "./index.css";
-
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
-
-  const [task, setTask] = useState({
-    name: "",
-    date: "",
-    desc: ""
-  });
+  const [task, setTask] = useState({name: "",date: "",desc: ""});
 
   const addTask = (e) => {
     e.preventDefault();
-
     if (!task.name || !task.date) return;
     setTasks([...tasks, { ...task, done: false }]);
     setTask({name: "",date: "",desc: ""});
@@ -34,23 +27,20 @@ export default function App() {
           type="text"
           placeholder="Task Name"
           value={task.name}
-          onChange={(e) =>setTask({ ...task, name: e.target.value })}
-        />
+          onChange={(e) =>setTask({ ...task, name: e.target.value })}/>
 
         <input
           type="date"
           value={task.date}
-          onChange={(e) =>setTask({ ...task, date: e.target.value })}
-        />
+          onChange={(e) =>setTask({ ...task, date: e.target.value })}/>
 
         <input
           type="text"
-          placeholder="Desc"
+          placeholder="Description (Optional)"
           value={task.desc}
-          onChange={(e) =>setTask({ ...task, desc: e.target.value })}
-        />
+          onChange={(e) =>setTask({ ...task, desc: e.target.value })}/>
 
-        <button>Add</button>
+        <button type="submit">Add Task</button>
       </form>
 
       <div>
@@ -60,17 +50,14 @@ export default function App() {
       </div>
 
       {filteredTasks.map((t, i) => (
-        <div key={i}>
+        <div
+          key={i}
+          onClick={() =>setTasks(
+              tasks.map((item, index) =>index === i? { ...item, done: !item.done }: item))}>
           <h4>{t.name}</h4>
           <p>Due Date: {t.date}</p>
           {t.desc && <p>Description: {t.desc}</p>}
           <p>Status: {t.done ? "Done" : "Not Done"}</p>
-
-          <button onClick={() =>setTasks(
-                tasks.map((item, index) =>
-                  index === i? { ...item, done: !item.done }: item))}>
-            Mark {t.done ? "Not Done" : "Done"}
-          </button>
         </div>
       ))}
     </div>
