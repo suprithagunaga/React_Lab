@@ -1,138 +1,97 @@
-import { useState, useEffect, useCallback} from 'react';
+import { useState, useEffect } from "react";
 import DOMPurify from "dompurify";
-import "./index.css";
-
-const Form=()=>{
-  const [formData,setFormData] = useState({
-    name:"",
-    email:"",
-    password:"",
+import "./App.css";
+export default function App() {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: ""
   });
-  const [errors, setErrors]=useState({});
-  const [submittedData , setSubmittedData] = useState(null);
-  const [showPassword, setShowPassword] =useState(false);
-  const [ isFormValid, setIsFormValid] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitted, setSubmitted] = useState(null);
 
-  const sanitizeInput=(value) => DOMPurify.sanitize(value);
-  const handleChange =(e) =>{
-    const {name, value}=e.target;
-    setFormData((prev) =>({
-      ...prev,
-    [name]:sanitizeInput(value.trim())
-    }));
-  
+  useEffect(() => {
+    const err = {};
+    if (!data.name) err.name = "Name is required";
+    if (!/^\S+@\S+\.\S+$/.test(data.email))
+      err.email = "Enter valid email";
+    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/.test(data.password))
+      err.password = "Min 6 chars, 1 uppercase, 1 number, 1 special char";
+    setErrors(err);
+  }, [data]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setData({
+      ...data,
+      [name]: DOMPurify.sanitize(value.trim())
+    });
   };
-
-  const validateForm= useCallback(()=>{
-    let valid =true;
-    const newErrors={};
-
-    if(!formData.name){
-      newErrors.name="Name is required";
-      valid=false;
-    }
-    const emailPattern =
-    /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if(!formData.email){
-      newErrors.email="email is required";
-      valid=false;
-    }
-    else if(!emailPattern.test(formData.email)){
-      newErrors.email="Enter valid email";
-      valid=false;
-    }
-    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
-    if(!formData.password){
-      newErrors.password="Password is required";
-      valid=false;
-    }
-    else if(!passwordPattern.test(formData.password)){
-      newErrors.password="Min 6 chars, 1 upppercase, 1 number, 1 special char";
-      valid= false;
-    }
-    setErrors(newErrors);
-    setIsFormValid(valid);
-
-  },[formData]);
-
-  useEffect(()=>{
-    validateForm();
-  },[formData,validateForm]);
-
-  const handleSubmit =(e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if(isFormValid){
-      setSubmittedData(formData);
-      setFormData({
-        name:"",
-        email:"",
-        password:"",
+    if (Object.keys(errors).length === 0) {
+      setSubmitted(data);
+      setData({
+        name: "",
+        email: "",
+        password: ""
       });
     }
   };
-
-  return(
-    <div className ="form-container">
+  return (
+    <div className="container">
       <h2>Registration Form</h2>
+
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-        <label>Name</label>
-        <input type="text"
-        name="name"
-        value ={formData.name}
-        onChange ={handleChange}
-        className ={errors.name ? "error-border" :""}
-        placeholder="Enter name"/>
-        {errors.name && 
-        <div className ="error-message">
-          {errors.name}</div>}</div>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter name"
+          value={data.name}
+          onChange={handleChange}
+          className={errors.name ? "error" : ""}
+        />
+        {errors.name && <small>{errors.name}</small>}
 
-          <div className ="form-group">
-          <label>Email</label>
-          <input 
-          type ="email"
+        <input
+          type="email"
           name="email"
-          value ={formData.email}
+          placeholder="Enter email"
+          value={data.email}
           onChange={handleChange}
-          className={errors.email ? "error-border" :""}
-          placeholder="Enter email"/>
-          {errors.email && 
-        <div className ="error-message">
-          {errors.email}</div>}</div>
+          className={errors.email ? "error" : ""}
+        />
+        {errors.email && <small>{errors.email}</small>}
 
-          <div className ="form-group">
-          <label>Password</label>
-          <input 
-          type ={showPassword ? "text":"password"}
+        <input
+          type={showPassword ? "text" : "password"}
           name="password"
-          value ={formData.password}
+          placeholder="Enter password"
+          value={data.password}
           onChange={handleChange}
-          className={errors.password ? "error-border" :""}
-          placeholder="Enter password"/>
-          {errors.password && 
-        <div className ="error-message">
-          {errors.password}</div>}</div>
+          className={errors.password ? "error" : ""}
+        />
+        {errors.password && <small>{errors.password}</small>}
 
-          <div className ="form-group">
-          <label>
-          <input 
-          type ="checkbox"
-          checked ={showPassword}
-          onChange={ () =>
-            setShowPassword(!showPassword)}/>ShowPassword</label></div>
-            <button type ="submit"
-            disabled={!isFormValid}>Submit</button>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}/>Show Password</label>
+        <button
+          type="submit"
+          disabled={Object.keys(errors).length > 0}>Submit</button>
       </form>
-
-      {submittedData && (
-        <div className="result">
+      {submitted && (
+        <div className="output">
           <h3>Submitted Data</h3>
-          <p>Name :{submittedData.name}</p>
-          <p>Email :{submittedData.email}</p>
-          <p>Password :{submittedData.password}</p></div>
+          <p>Name: {submitted.name}</p>
+          <p>Email: {submitted.email}</p>
+          <p>Password: {submitted.password}</p>
+        </div>
       )}
     </div>
   );
-};
-
-export default Form;
+}
