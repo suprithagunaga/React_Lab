@@ -2,7 +2,7 @@ import React from "react";
 import {Routes,Route,NavLink} from 'react-router-dom';
 import Home from './Home.jsx';
 import About from './About.jsx';
-import Contact from './Contact';
+import Contact from './Contact.jsx';
 function App(){
   const LinkStyle =({isActive})=>({
     margin:'0 10px', textDecoration:'none', color:isActive?'blue':'black', fontWeight:isActive?'bold':'normal'
