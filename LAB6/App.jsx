@@ -65,9 +65,7 @@ export default function App() {
             type="checkbox"
             checked={showPassword}
             onChange={() => setShowPassword(!showPassword)}/>Show Password</label>
-        <button
-          type="submit"
-          disabled={Object.keys(errors).length > 0}>Submit</button>
+        <button type="submit" disabled={Object.keys(errors).length > 0}>Submit</button>
       </form>
       {submitted && (
         <div className="output">
